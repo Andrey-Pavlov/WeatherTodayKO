@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Today</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+
+<div>
+    <input class="search" type="text" data-bind="value: cityName, valueUpdate: 'afterkeydown'" />
+    <button data-bind="click: getCurrentWeatherByCityName">Find weather</button>
+</div>
+<div data-bind="with: currentWeather">
+    <div data-bind="with: weather[0]">
+        <img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon + '.png' }">
+        <div><span data-bind="text: main"></span><span data-bind="text: description"></span></div>
+    </div>
+Clouds:<div data-bind="text: clouds.all"></div>
+    <div data-bind="with: main">
+        <div data-bind="text: temp"></div>
+        <div data-bind="text: pressure"></div>
+        <div data-bind="text: humidity"></div>
+    </div>
+    Precipitation<div data-bind="text: $root.getPrecipitation($data.rain, $data.snow)"></div>
+</div>
+
+<div>
+    <div data-bind="foreach: searches">
+        <div data-bind="text: $data"></div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
