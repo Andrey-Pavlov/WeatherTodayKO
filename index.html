@@ -3,36 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather Today</title>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/weather.css">
 </head>
-<body>
-
+<body style="display: none;" data-bind="visible: true">
+<section class="container" data-bind="css: getBackgroundClass(currentWeather())">
 <div>
-    <input class="search" type="text" data-bind="value: cityName, valueUpdate: 'afterkeydown'" />
-    <button data-bind="click: getCurrentWeatherByCityName">Find weather</button>
+    <input class="search" type="text" data-bind="value: cityName, valueUpdate: 'afterkeydown'"/>
+    <button data-bind="click: function() { getCurrentWeatherByCityName(cityName()); }, enable: cityName">Find weather</button>
 </div>
 <div data-bind="with: currentWeather">
     <div data-bind="with: weather[0]">
         <img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon + '.png' }">
-        <div><span data-bind="text: main"></span><span data-bind="text: description"></span></div>
+        <div><span data-bind="text: main"></span> <span data-bind="text: description"></span></div>
     </div>
-Clouds:<div data-bind="text: clouds.all"></div>
+    <div>Clouds: <span data-bind="text: clouds.all"></span></div>
     <div data-bind="with: main">
-        <div data-bind="text: temp"></div>
-        <div data-bind="text: pressure"></div>
-        <div data-bind="text: humidity"></div>
+        <div>Temperature: <span data-bind="text: temp"></span></div>
+        <div>Pressure: <span data-bind="text: pressure"></span></div>
+        <div>Humidity: <span data-bind="text: humidity"></span></div>
     </div>
-    Precipitation<div data-bind="text: $root.getPrecipitation($data.rain, $data.snow)"></div>
+    <div>
+        Precipitation
+        <span data-bind="text: $root.getPrecipitation($data.rain, $data.snow)"></span>
+    </div>
 </div>
 
 <div>
-    <div data-bind="foreach: searches">
-        <div data-bind="text: $data"></div>
-    </div>
+    <ul class="swing" data-bind="foreach: { data: searches, afterRender : searchAddAnimation  }">
+        <li data-bind="text: $data"></li>
+    </ul>
 </div>
-
+</section>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
-<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="js/request.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
