@@ -8,36 +8,46 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/weather.css">
 </head>
-<body style="display: none;" data-bind="visible: true">
-<section class="container" data-bind="css: getBackgroundClass(currentWeather())">
-<div>
-    <input class="search" type="text" data-bind="value: cityName, valueUpdate: 'afterkeydown'"/>
-    <button data-bind="click: function() { getCurrentWeatherByCityName(cityName()); }, enable: cityName">Find weather</button>
-</div>
-<div data-bind="with: currentWeather">
-    <div data-bind="with: weather[0]">
-        <img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon + '.png' }">
-        <div><span data-bind="text: main"></span> <span data-bind="text: description"></span></div>
-    </div>
-    <div>Clouds: <span data-bind="text: clouds.all"></span></div>
-    <div data-bind="with: main">
-        <div>Temperature: <span data-bind="text: temp"></span></div>
-        <div>Pressure: <span data-bind="text: pressure"></span></div>
-        <div>Humidity: <span data-bind="text: humidity"></span></div>
-    </div>
+<body style="display: none;" data-bind="visible: true, css: backgroundClass">
+<section class="container">
     <div>
-        Precipitation
-        <span data-bind="text: $root.getPrecipitation($data.rain, $data.snow)"></span>
+        <section data-bind="with: currentWeather">
+            <h1 data-bind="text: cityName"></h1>
+            <div style="text-align: center">
+                <img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon() + '.png' }">
+                <div class="temperature"><span data-bind="text: temperature"></span>°C</div>
+                <div><span data-bind="text: main"></span> (<span data-bind="text: description"></span>)</div>
+            </div>
+            <div>Cloudness: <span data-bind="text: clouds"></span>%</div>
+            <div>Pressure: <span data-bind="text: pressure"></span></div>
+            <div>Humidity: <span data-bind="text: humidity"></span>%</div>
+            <div>
+                Precipitation
+                <span data-bind="text: precipitation"></span>&nbsp;mm
+            </div>
+        </section>
+        <section>
+            <div>
+                <input class="search"  type="text" data-bind="autoComplete: { autocompleteCityFunction: autocompleteCityFunction, selected: cityNameSearch, searchAdvices: searchAdvices }, value: cityNameSearch, valueUpdate: 'afterkeydown'"/>
+                <button data-bind="click: function() { getCurrentWeatherByCityName(cityNameSearch()); }, enable: cityNameSearch">
+                    Find weather
+                </button>
+            </div>
+            <div data-bind="style: { visibility:  searchAdvices().length > 0 ? 'visible' : 'hidden' }">Are you interested in weather in another city? : <span data-bind="fadeInFadeOut: searchAdvices"><a href="#" data-bind="click: function() { getCurrentWeatherByCityName(rotateCity()); }"></a></span></div>
+            <div>
+                <ul class="swing" data-bind="foreach: { data: searches, afterRender : searchAddAnimation, beforeRemove: searchRemoveAnimation  }">
+                    <li><a href="#" data-bind="click: $parent.getCurrentWeatherByCity, text: $data.name"></a><i class="clickable" style="float: right" data-bind="click: $parent.removeRecentSearch">&times;</i></li>
+                </ul>
+            </div>
+        </section>
     </div>
-</div>
-
-<div>
-    <ul class="swing" data-bind="foreach: { data: searches, afterRender : searchAddAnimation  }">
-        <li data-bind="text: $data"></li>
-    </ul>
-</div>
 </section>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+<script src="libs/autocomplete/autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="libs/autocomplete/autocomplete.css">
+
+<script type="text/javascript" src="js/ko.bindings.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript" src="js/request.js"></script>
 <script type="text/javascript" src="js/index.js"></script>

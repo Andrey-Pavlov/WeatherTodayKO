@@ -5,93 +5,155 @@
         var isLoading = true,
             self = this;
 
-        self.init = function (cityName) {
-            self.cityName(cityName);
-            self.getCurrentWeatherByCityName(cityName);
+        self.init = function (city) {
+            getCurentWeatherByCity(city);
         };
+        self.backgroundClass = ko.observable();
 
-        self.getBackgroundClass = function (currentWeather) {
-            var weatherCode = currentWeather ? currentWeather.weather[0].id : 800;
+        self.currentWeather = ko.observable();
+        self.currentWeather.subscribe(function (weather) {
+            var weatherCode = weather ? weather.id() : 800,
+                newBackground = null;
 
             switch (true) {
                 case weatherCode < 300:
-                    return 'thunder';
+                    newBackground = 'thunder';
                     break;
                 case weatherCode < 500:
-                    return 'rain';
+                    newBackground = 'rain';
                     break;
                 case weatherCode < 600:
-                    return 'rain';
+                    newBackground = 'rain';
                     break;
                 case weatherCode < 701:
-                    return 'snowing';
+                    newBackground = 'snowing';
                     break;
                 case weatherCode < 741:
-                    return 'haze';
+                    newBackground = 'haze';
                     break;
                 case weatherCode < 800:
-                    return 'fog';
+                    newBackground = 'fog';
                     break;
                 case weatherCode < 801:
-                    return 'sunny';
+                    newBackground = 'sunny';
                     break;
                 case weatherCode < 802:
-                    return 'partlyCloudy';
+                    newBackground = 'partlyCloudy';
                     break;
                 case weatherCode < 900:
-                    return 'moreclouds';
+                    newBackground = 'moreclouds';
                     break;
             }
+
+            self.backgroundClass(newBackground);
+        });
+
+        self.cityNameSearch = ko.observable();
+
+        self.autocompleteCityFunction = function (term, callback) {
+            request.jsonp.send('http://gd.geobytes.com/AutoCompleteCity?callback=handleStuff&sort=size&q=' + term, {
+                callbackName: 'handleStuff',
+                onSuccess: function (json) {
+                    callback(json);
+                }
+            })
         };
 
-        self.cityName = ko.observable();
-        self.currentWeather = ko.observable();
-        self.searches = ko.observableArray();
+        self.searchAdvices = ko.observableArray();
 
+        self.searches = ko.observableArray();
+        self.removeRecentSearch = function () {
+            self.searches.remove(this);
+        };
         self.searchAddAnimation = function (arr, val) {
+            setTimeout(function () {
+                arr[1].classList.add('show');
+            }, 1);
+        };
+
+        self.searchRemoveAnimation = function (node) {
+            if (node.nodeType === 1) {
+                node.classList.remove('show');
                 setTimeout(function () {
-                    arr[1].classList.add('show');
-                }, 100);
+                    node.remove();
+                }, 500);
+            }
+        };
+        self.getCurrentWeatherByCity = function () {
+            getCurentWeatherByCity(this);
         };
 
         self.getCurrentWeatherByCityName = function (cityName) {
-            self.searches.remove(function (item) {
-                return item == cityName;
-            });
-            self.searches.unshift(cityName);
+            getCurentWeatherByCity(resolveCityObjByCityName(cityName));
 
-            if (self.searches().length > 15) {
-                self.searches.pop();
-            }
-
-            getCurentWeatherByCityName(cityName);
+            self.cityNameSearch('');
         };
 
-        self.getPrecipitation = function (rain, snow) {
-            var precipitation = 0;
+        var cacheWeather = null;
 
-            if (rain && rain['3h']) {
-                precipitation += rain['3h'];
-            }
-
-            if (snow && snow['3h']) {
-                precipitation += snow['3h'];
-            }
-
-            return precipitation;
-        };
-
-        function getCurentWeatherByCityName(cityName) {
-            request.ajax("http://openweathermap.org/data/2.5/weather?q=" + cityName + "&units=metric&appid=b1b15e88fa797225412429c1c50c122a1", function (data) {
+        function getCurentWeatherByCity(city) {
+            request.ajax("http://openweathermap.org/data/2.5/weather?q=" + city.name + "&units=metric&appid=b1b15e88fa797225412429c1c50c122a1", function (cityWeather) {
                 isLoading = false;
 
-                self.currentWeather(data);
+                if (cacheWeather) {
+                    cityWeather.name = city.name;
+                    cityWeather.id = city.id;
+                }
+
+                self.searches.remove(function (item) {
+                    return item.id == cityWeather.id;
+                });
+                self.searches.unshift(cityWeather);
+
+                if (self.searches().length > 15) {
+                    self.searches.pop();
+                }
+
+                var weatherData = new WeatherPageSectionViewModel(cityWeather);
+                self.currentWeather(weatherData);
+
+                cacheWeather = weatherData;
             })
+        }
+
+        function resolveCityObjByCityName(cityName) {
+            return {id: Date.now(), name: cityName};
         }
     };
 
     var viewModel = new ViewModel();
-    viewModel.init('Moscow');
+    viewModel.init({id: 0, name: 'Moscow'});
 
     ko.applyBindings(viewModel);
+
+    function WeatherPageSectionViewModel(weatherAPIObject) {
+        var self = this;
+
+        var precipitation = 0,
+            rain = weatherAPIObject.rain,
+            snow = weatherAPIObject.snow;
+
+        if (rain && rain['3h']) {
+            precipitation += rain['3h'];
+        }
+
+        if (snow && snow['3h']) {
+            precipitation += snow['3h'];
+        }
+
+        self.id = ko.observable(weatherAPIObject.weather[0].id);
+        self.cityName = ko.observable(weatherAPIObject.name.toUpperCase());
+
+        self.icon = ko.observable(weatherAPIObject.weather[0].icon);
+
+        self.main = ko.observable(weatherAPIObject.weather[0].main);
+        self.description = ko.observable(weatherAPIObject.weather[0].description);
+
+        self.clouds = ko.observable(weatherAPIObject.clouds.all);
+
+        self.temperature = ko.observable(Math.round(weatherAPIObject.main.temp));
+        self.pressure = ko.observable(weatherAPIObject.main.pressure);
+        self.humidity = ko.observable(weatherAPIObject.main.humidity);
+        self.precipitation = ko.observable(precipitation);
+    }
 }());

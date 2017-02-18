@@ -34,6 +34,10 @@
     background: linear-gradient(rgb(117,127,154),rgb(215,221,232));
 }
 
+.temperature {
+    font-size: 5rem;
+}
+
 .swing {
     perspective: 100px;
 }
@@ -41,12 +45,23 @@
     opacity: 0;
     transform: rotateX(-90deg);
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-    background: white;
-    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 .swing li.show {
     opacity: 1;
     transform: none;
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+    box-shadow: 0 0 0.5rem;
+}
+
+/**/
+.fade {
+    transition: opacity 1000ms;
+}
+.fadeOut {
+    opacity: 1;
+}
+.fadeIn {
+    opacity: 0;
 }

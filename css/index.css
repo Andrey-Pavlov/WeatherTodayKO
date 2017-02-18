@@ -2,6 +2,30 @@ html, body {
     height: 100%;
 }
 
+h1 {
+    text-align: center;
+}
+
+a {
+    color: inherit;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
 .container {
-    height: 100%;
+    width: 800px;
+    margin: 0 auto;
+}
+
+.container ul {
+    padding: 0;
+    margin: 0;
+}
+
+.container ul li {
+    padding: 0.5rem;
+    list-style-type: none;
+    margin-bottom: 0.5rem;
 }
