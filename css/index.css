@@ -2,7 +2,7 @@ html, body {
     height: 100%;
 }
 
-h1 {
+h1, h2, h3, h4, h5 {
     text-align: center;
 }
 
@@ -10,22 +10,15 @@ a {
     color: inherit;
 }
 
-.clickable {
+input, button {
+    outline: none;
+}
+
+.owf {
+    color: white;
+    vertical-align: middle;
+}
+
+.my-clickable {
     cursor: pointer;
-}
-
-.container {
-    width: 800px;
-    margin: 0 auto;
-}
-
-.container ul {
-    padding: 0;
-    margin: 0;
-}
-
-.container ul li {
-    padding: 0.5rem;
-    list-style-type: none;
-    margin-bottom: 0.5rem;
 }

@@ -5,9 +5,8 @@
         var isLoading = true,
             self = this;
 
-        self.init = function (city) {
-            getCurentWeatherByCity(city);
-        };
+        self.iconClass = ko.observable();
+
         self.backgroundClass = ko.observable();
 
         self.currentWeather = ko.observable();
@@ -46,6 +45,8 @@
             }
 
             self.backgroundClass(newBackground);
+
+            self.iconClass('owf-' + weatherCode);
         });
 
         self.cityNameSearch = ko.observable();
@@ -59,6 +60,7 @@
             })
         };
 
+        self.rotateCity = ko.observable();
         self.searchAdvices = ko.observableArray();
 
         self.searches = ko.observableArray();
@@ -112,6 +114,8 @@
                 var weatherData = new WeatherPageSectionViewModel(cityWeather);
                 self.currentWeather(weatherData);
 
+                self.searchAdvices.push(cityWeather.name);
+
                 cacheWeather = weatherData;
             })
         }
@@ -122,7 +126,6 @@
     };
 
     var viewModel = new ViewModel();
-    viewModel.init({id: 0, name: 'Moscow'});
 
     ko.applyBindings(viewModel);
 

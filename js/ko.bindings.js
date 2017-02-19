@@ -3,7 +3,8 @@ ko.bindingHandlers.fadeInFadeOut = {
         var timeIn = 5000,
             timeOut = 1000,
             i = 0,
-            anchor = el.querySelector('a');
+            anchor = el.querySelector('a'),
+            options = ko.unwrap(valueAccessor());
 
         el.classList.add('fade');
 
@@ -14,11 +15,11 @@ ko.bindingHandlers.fadeInFadeOut = {
                 el.classList.remove('fadeOut');
 
                 setTimeout(function () {
-                    var array = ko.unwrap(valueAccessor()),
+                    var array = options.searchAdvices(),
                         val = array[i];
 
                     if(val) {
-                        anchor.innerText = array[i];
+                        options.rotateCity(array[i]);
 
                         i++;
 

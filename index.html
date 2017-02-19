@@ -5,47 +5,126 @@
     <title>Weather Today</title>
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="libs/autocomplete/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="css/background-animation.css">
+    <link rel="stylesheet" type="text/css" href="css/owfont-regular.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/weather.css">
 </head>
 <body style="display: none;" data-bind="visible: true, css: backgroundClass">
-<section class="container">
-    <div>
-        <section data-bind="with: currentWeather">
+<section class="my-weather-container">
+    <section class="my-weather-container__weather-details">
+        <div data-bind="with: currentWeather">
             <h1 data-bind="text: cityName"></h1>
             <div style="text-align: center">
-                <img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon() + '.png' }">
-                <div class="temperature"><span data-bind="text: temperature"></span>°C</div>
+
+                <!--<img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon() + '.png' }">-->
+                <div class="temperature"><i data-bind="css: $root.iconClass" class="owf"></i><!--ko text: temperature --><!--/ko-->°C</div>
                 <div><span data-bind="text: main"></span> (<span data-bind="text: description"></span>)</div>
             </div>
-            <div>Cloudness: <span data-bind="text: clouds"></span>%</div>
-            <div>Pressure: <span data-bind="text: pressure"></span></div>
-            <div>Humidity: <span data-bind="text: humidity"></span>%</div>
-            <div>
-                Precipitation
-                <span data-bind="text: precipitation"></span>&nbsp;mm
+            <div class="my-weather-item-flex-container">
+                <div class="weather-item"><h4>Cloudiness</h4>
+                    <div>
+                        <div class="my-progress-container">
+                            <div class="my-progress-container__label"><strong><!--ko text: clouds --><!--/ko-->%</strong></div>
+                            <div class="my-progress-container__progressbar my-progress-container__progressbar_white"
+                                 data-bind="style: { height: clouds() + '%' }"></div>
+                        </div>
+                    </div>
+                </div><!--
+             -->
+                <div class="weather-item"><h4>Humidity</h4>
+                    <div>
+                        <div class="my-progress-container">
+                            <div class="my-progress-container__label"><strong><!--ko text: humidity --><!--/ko-->%</strong></div>
+                            <div class="my-progress-container__progressbar my-progress-container__progressbar_blue"
+                                 data-bind="style: { height: humidity() + '%' }"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
-        <section>
-            <div>
-                <input class="search"  type="text" data-bind="autoComplete: { autocompleteCityFunction: autocompleteCityFunction, selected: cityNameSearch, searchAdvices: searchAdvices }, value: cityNameSearch, valueUpdate: 'afterkeydown'"/>
-                <button data-bind="click: function() { getCurrentWeatherByCityName(cityNameSearch()); }, enable: cityNameSearch">
-                    Find weather
-                </button>
+            <div class="my-weather-item-flex-container">
+                <div class="weather-item"><h4>Pressure</h4>
+                    <div><!--ko text: pressure--><!--/ko-->&nbsp;mbar</div>
+                </div><!--
+             -->
+                <div class="weather-item">
+                    <h4>Precipitation</h4>
+                    <div><!--ko text: precipitation--><!--/ko-->&nbsp;mm</div>
+                </div>
             </div>
-            <div data-bind="style: { visibility:  searchAdvices().length > 0 ? 'visible' : 'hidden' }">Are you interested in weather in another city? : <span data-bind="fadeInFadeOut: searchAdvices"><a href="#" data-bind="click: function() { getCurrentWeatherByCityName(rotateCity()); }"></a></span></div>
-            <div>
-                <ul class="swing" data-bind="foreach: { data: searches, afterRender : searchAddAnimation, beforeRemove: searchRemoveAnimation  }">
-                    <li><a href="#" data-bind="click: $parent.getCurrentWeatherByCity, text: $data.name"></a><i class="clickable" style="float: right" data-bind="click: $parent.removeRecentSearch">&times;</i></li>
-                </ul>
-            </div>
-        </section>
-    </div>
+            <hr/>
+        </div>
+    </section>
+    <section>
+        <div style="box-shadow: 0 0 2rem white;">
+            <input style="width: 90%;" type="search" placeholder="Start typing for CITY suggestions..."
+                   data-bind="autoComplete: { autocompleteCityFunction: autocompleteCityFunction, selected: cityNameSearch, searchAdvices: searchAdvices }, value: cityNameSearch, valueUpdate: 'afterkeydown'"/><!--
+                --><button style="width: 10%;"
+                    data-bind="click: function() { getCurrentWeatherByCityName(cityNameSearch()); }, enable: cityNameSearch">
+                Find
+            </button>
+        </div>
+        <div style="margin: 1rem 0;"
+             data-bind="style: { visibility:  searchAdvices().length > 0 ? 'visible' : 'hidden' }">Are you interested in
+            weather in another city? : <span
+                    data-bind="fadeInFadeOut: { searchAdvices: searchAdvices, rotateCity: rotateCity }"><a href="#"
+                                                                                                           data-bind="click: function() { getCurrentWeatherByCityName(rotateCity()); }, text: rotateCity"></a></span>
+        </div>
+        <div>
+            <ul class="swing"
+                data-bind="foreach: { data: searches, afterRender : searchAddAnimation, beforeRemove: searchRemoveAnimation  }">
+                <li><a href="#" data-bind="click: $parent.getCurrentWeatherByCity, text: $data.name"></a><i
+                        class="my-clickable" style="float: right"
+                        data-bind="click: $parent.removeRecentSearch">&times;</i></li>
+            </ul>
+        </div>
+    </section>
 </section>
+<!-- ko if: !currentWeather() -->
+<div class="cloud-background">
+    <div class="cloud large cloud-1">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud normal cloud-2">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud small cloud-3">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud tiny cloud-4">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud large cloud-5">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud normal cloud-6">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud small cloud-7">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud tiny cloud-8">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud small cloud-9">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud normal cloud-10">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud tiny cloud-11">
+        <div></div><div></div><div></div><div></div>
+    </div>
+    <div class="cloud small cloud-12">
+        <div></div><div></div><div></div><div></div>
+    </div>
+</div>
+<!-- /ko -->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+
 <script src="libs/autocomplete/autocomplete.js"></script>
-<link rel="stylesheet" type="text/css" href="libs/autocomplete/autocomplete.css">
 
 <script type="text/javascript" src="js/ko.bindings.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
