@@ -1,5 +1,5 @@
 (function() {
-    function ajax(url, callback) {
+    function ajax(url, callback, httpErrorCallback, xhrErrorCallback) {
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
 
@@ -7,11 +7,12 @@
             if (this.status >= 200 && this.status < 400) {
                 callback(JSON.parse(this.response));
             } else {
+                httpErrorCallback(this.response);
             }
         };
 
         request.onerror = function () {
-            // There was a connection error of some sort
+            xhrErrorCallback(arguments);
         };
 
         request.send();

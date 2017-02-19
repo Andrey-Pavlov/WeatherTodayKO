@@ -43,17 +43,17 @@
 }
 
 /**/
-.swing {
+.swing-animation {
     perspective: 100px;
 }
-.swing li {
+.swing-animation li {
     opacity: 0;
     transform: rotateX(-90deg);
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-.swing li.show {
+.swing-animation li.show {
     opacity: 1;
     transform: none;
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
@@ -69,6 +69,10 @@
     height: 28rem;
 }
 
+.my-weather-container__weather-details__header {
+    text-align: center;
+}
+
 .my-weather-container__weather-details h1 {
     margin-top: 0;
     padding-top: 1rem;
@@ -78,25 +82,33 @@
 
 }
 
-.my-weather-container ul {
+.my-weather-container__search-details__searchbox {
+    box-shadow: 0 0 2rem white;
+}
+
+.my-weather-container__search-details__weather-advices {
+    margin: 1rem 0;
+}
+
+.my-weather-container__search-details ul {
     padding: 0;
     margin: 0;
 }
 
-.my-weather-container ul li {
+.my-weather-container__search-details ul li {
     padding: 0.5rem;
     list-style-type: none;
     margin-bottom: 0.5rem;
 }
 
 /**/
-.fade {
+.fade-animation {
     transition: opacity 1000ms;
 }
-.fadeOut {
+.fade-animation.fadeOut {
     opacity: 1;
 }
-.fadeIn {
+.fade-animation.fadeIn {
     opacity: 0;
 }
 /**/

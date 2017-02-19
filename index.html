@@ -16,9 +16,7 @@
     <section class="my-weather-container__weather-details">
         <div data-bind="with: currentWeather">
             <h1 data-bind="text: cityName"></h1>
-            <div style="text-align: center">
-
-                <!--<img data-bind="attr: { src: 'http://openweathermap.org/img/w/' + icon() + '.png' }">-->
+            <div class="my-weather-container__weather-details__header">
                 <div class="temperature"><i data-bind="css: $root.iconClass" class="owf"></i><!--ko text: temperature --><!--/ko-->°C</div>
                 <div><span data-bind="text: main"></span> (<span data-bind="text: description"></span>)</div>
             </div>
@@ -45,7 +43,7 @@
             </div>
             <div class="my-weather-item-flex-container">
                 <div class="weather-item"><h4>Pressure</h4>
-                    <div><!--ko text: pressure--><!--/ko-->&nbsp;mbar</div>
+                    <div><!--ko text: pressure--><!--/ko-->&nbsp;hPa</div>
                 </div><!--
              -->
                 <div class="weather-item">
@@ -56,8 +54,8 @@
             <hr/>
         </div>
     </section>
-    <section>
-        <div style="box-shadow: 0 0 2rem white;">
+    <section class="my-weather-container__search-details">
+        <div class="my-weather-container__search-details__searchbox">
             <form novalidate="novalidate" class="searchbox sbx-custom" data-bind="submit: submitSearch">
                 <div role="search" class="sbx-custom__wrapper">
                     <input type="search" name="search" placeholder="Start typing for CITY suggestions..." autocomplete="off" required="required" class="sbx-custom__input"
@@ -78,17 +76,17 @@
                 </div>
             </form>
         </div>
-        <div style="margin: 1rem 0;"
+        <div class="my-weather-container__search-details__weather-advices"
              data-bind="style: { visibility:  searchAdvices().length > 0 ? 'visible' : 'hidden' }">Are you interested in
-            weather in another city? : <span
+            weather in another city?: <span
                     data-bind="fadeInFadeOut: { searchAdvices: searchAdvices, rotateCity: rotateCity }"><a href="#"
                                                                                                            data-bind="click: function() { getCurrentWeatherByCityName(rotateCity()); }, text: rotateCity"></a></span>
         </div>
         <div>
-            <ul class="swing"
+            <ul class="swing-animation"
                 data-bind="foreach: { data: searches, afterRender : searchAddAnimation, beforeRemove: searchRemoveAnimation  }">
                 <li><a href="#" data-bind="click: $parent.getCurrentWeatherByCity, text: $data.name"></a><i
-                        class="my-clickable" style="float: right"
+                        class="my-clickable my-float-right"
                         data-bind="click: $parent.removeRecentSearch">&times;</i></li>
             </ul>
         </div>
@@ -145,13 +143,32 @@
     </symbol>
 </svg>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
-
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="js/helpers/request.js"></script>
 <script src="libs/autocomplete/autocomplete.js"></script>
 
-<script type="text/javascript" src="js/ko.bindings.js"></script>
-<script type="text/javascript" src="js/base.js"></script>
-<script type="text/javascript" src="js/request.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+<script type="text/javascript" src="js/helpers/ko.bindings.js"></script>
+<script type="text/javascript" src="js/sections/weather.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
+<script>
+    function ready(fn) {
+        if (document.readyState != 'loading'){
+            fn();
+        } else {
+            document.addEventListener('DOMContentLoaded', fn);
+        }
+    }
+
+    (function () {
+        ready(function () {
+            app.weather.init({
+                maxItems: 15,
+                url: 'http://api.openweathermap.org/data/2.5/weather?units=metric',
+                appid: 'e7547c6a66cd020e679dc5ae8803726e'
+            });
+        });
+    }());
+</script>
 </body>
 </html>

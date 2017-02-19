@@ -6,7 +6,7 @@ ko.bindingHandlers.fadeInFadeOut = {
             anchor = el.querySelector('a'),
             options = ko.unwrap(valueAccessor());
 
-        el.classList.add('fade');
+        el.classList.add('fade-animation');
 
         (function x() {
 
@@ -79,7 +79,7 @@ ko.bindingHandlers.autoComplete = {
             }
         });
 
-        function distinctValues(arr) {
+        function distinctValues(arr, prop) {
             return arr.reduce(function(a,b){
                 if (a.indexOf(b) < 0 ) a.push(b);
                 return a;

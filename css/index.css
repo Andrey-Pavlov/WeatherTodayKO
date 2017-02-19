@@ -29,6 +29,10 @@ input[disabled=disabled], input:disabled{
     cursor: pointer;
 }
 
+.my-float-right {
+    float: right;
+}
+
 /* Searchbox */
 .sbx-custom {
     display: inline-block;
