@@ -17,7 +17,7 @@
         <div data-bind="with: currentWeather">
             <h1 data-bind="text: cityName"></h1>
             <div class="my-weather-container__weather-details__header">
-                <div class="temperature"><i data-bind="css: $root.iconClass" class="owf"></i><!--ko text: temperature --><!--/ko-->°C</div>
+                <div class="temperature"><i data-bind="css: iconClass" class="owf"></i><!--ko text: temperature --><!--/ko-->°C</div>
                 <div><span data-bind="text: main"></span> (<span data-bind="text: description"></span>)</div>
             </div>
             <div class="my-weather-item-flex-container">

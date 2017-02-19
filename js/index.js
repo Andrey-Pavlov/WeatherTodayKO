@@ -10,8 +10,6 @@
                 url = options.url,
                 appid = options.appid;
 
-            self.iconClass = ko.observable();
-
             self.backgroundClass = ko.observable();
 
             self.currentWeather = ko.observable();
@@ -50,8 +48,6 @@
                 }
 
                 self.backgroundClass(newBackground);
-
-                self.iconClass('owf-' + weatherCode);
             });
 
             self.cityNameSearch = ko.observable();
@@ -88,11 +84,6 @@
                     }, 500);
                 }
             };
-            self.beforeMove = function (elem) {
-                if (elem.nodeType == 1) {
-                    elem.saveOffsetTop = elem.offsetTop;
-                }
-            };
 
             self.getCurrentWeatherByCity = function () {
                 getCurentWeatherByCity(null, this.id);
@@ -127,6 +118,8 @@
                     request.ajax(urlString, function (cityWeather) {
                         cacheObj.setItem(cityWeather.id, cityWeather, options.weatherCacheTime);
                         setCityWeather(cityWeather);
+                    }, function(response) {
+                        console.error(JSON.stringify(response));
                     });
                 }
 

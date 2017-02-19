@@ -16,6 +16,7 @@
 
         self.id = ko.observable(weatherAPIObject.weather[0].id);
         self.cityName = ko.observable(weatherAPIObject.name.toUpperCase());
+        self.iconClass = ko.observable('owf-' + weatherAPIObject.weather[0].id);
 
         self.icon = ko.observable(weatherAPIObject.weather[0].icon);
 
