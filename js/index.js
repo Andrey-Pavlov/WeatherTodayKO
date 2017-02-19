@@ -1,11 +1,11 @@
 (function () {
     app.namespace('weather').init = function (options) {
         var request = app.request,
-            WeatherPageSectionViewModel = app.weather.WeatherPageSectionViewModel;
+            WeatherPageSectionViewModel = app.weather.WeatherPageSectionViewModel,
+            cacheObj = new Cache();
 
         var ViewModel = function (options) {
-            var isLoading = true,
-                self = this,
+            var self = this,
                 maxItems = options.maxItems,
                 url = options.url,
                 appid = options.appid;
@@ -105,26 +105,42 @@
             };
 
             function getCurentWeatherByCity(cityName, id) {
-                var urlString = url + '&appid=' + appid;
+                var urlString = url + '&appid=' + appid,
+                    cacheItem;
 
                 if (id) {
-                    urlString += '&id=' + id;
-                } else if (cityName) {
-                    urlString += '&q=' + cityName;
-                } else {
-                    throw new Error('Incorrect weather search param.');
+                    cacheItem = cacheObj.getItem(id);
                 }
 
-                request.ajax(urlString, function (cityWeather) {
+                if (cacheItem) {
+                    setCityWeather(cacheItem);
+                }
+                else {
+                    if (id) {
+                        urlString += '&id=' + id;
+                    } else if (cityName) {
+                        urlString += '&q=' + cityName;
+                    } else {
+                        throw new Error('Incorrect weather search param.');
+                    }
+
+                    request.ajax(urlString, function (cityWeather) {
+                        cacheObj.setItem(cityWeather.id, cityWeather, options.weatherCacheTime);
+                        setCityWeather(cityWeather);
+                    });
+                }
+
+                function setCityWeather(cityWeather) {
                     var searches = self.searches(),
                         tempVar,
-                        indexOfElem;
+                        indexOfElem = -1;
 
-                    isLoading = false;
-
-                    indexOfElem = searches.findIndex(function (elt) {
-                        return elt.id === cityWeather.id;
-                    });
+                    for (var i = 0; i < searches.length; ++i) {
+                        if (searches[i].id == cityWeather.id) {
+                            indexOfElem = i;
+                            break;
+                        }
+                    }
 
                     if (indexOfElem === -1) {
                         self.searches.unshift(cityWeather);
@@ -144,7 +160,7 @@
                     self.currentWeather(weatherData);
 
                     self.searchAdvices.push(cityWeather.name);
-                });
+                }
             }
         };
 
@@ -152,4 +168,24 @@
 
         ko.applyBindings(viewModel);
     };
+
+    function Cache() {
+        var cache = {};
+
+        this.getItem = function (itemName, expireTimeMs) {
+            var item = cache[itemName];
+
+            return item;
+        };
+
+        this.setItem = function (itemName, item, timeMs) {
+            cache[itemName] = item;
+
+            (function (itemName) {
+                setTimeout(function () {
+                    delete cache[itemName];
+                }, timeMs);
+            }(itemName));
+        };
+    }
 }());

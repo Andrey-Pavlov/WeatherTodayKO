@@ -1,36 +1,45 @@
 .partlyCloudy {
+    background: -webkit-linear-gradient(rgb(218,226,248), rgb(214,164,164));
     background: linear-gradient(rgb(218,226,248), rgb(214,164,164));
 }
 
 .sunny {
+    background: -webkit-linear-gradient(rgb(255,78,80),rgb(249,212,35));
     background: linear-gradient(rgb(255,78,80),rgb(249,212,35));
 }
 
 .cloudy {
+    background: -webkit-linear-gradient(rgb(236,233,230),rgb(255,255,255));
     background: linear-gradient(rgb(236,233,230),rgb(255,255,255));
 }
 
 .snowing {
+    background: -webkit-linear-gradient(rgb(230,218,218),rgb(39,64,70));
     background: linear-gradient(rgb(230,218,218),rgb(39,64,70));
 }
 
 .rain {
+    background: -webkit-linear-gradient(rgb(97,97,97),rgb(155,197,195));
     background: linear-gradient(rgb(97,97,97),rgb(155,197,195));
 }
 
 .haze {
+    background: -webkit-linear-gradient(rgb(117,127,154),rgb(215,221,232));
     background: linear-gradient(rgb(117,127,154),rgb(215,221,232));
 }
 
 .fog {
+    background: -webkit-linear-gradient(rgb(255,255,255),rgb(236,233,230));
     background: linear-gradient(rgb(255,255,255),rgb(236,233,230));
 }
 
 .thunder {
+    background: -webkit-linear-gradient(rgb(35,37,38), rgb(65,67,69));
     background: linear-gradient(rgb(35,37,38), rgb(65,67,69));
 }
 
 .moreclouds {
+    background: -webkit-linear-gradient(rgb(117,127,154),rgb(215,221,232));
     background: linear-gradient(rgb(117,127,154),rgb(215,221,232));
 }
 
@@ -44,18 +53,23 @@
 
 /**/
 .swing-animation {
+    -webkit-perspective: 100px;
     perspective: 100px;
 }
 .swing-animation li {
     opacity: 0;
+    -webkit-transform: rotateX(-90deg);
     transform: rotateX(-90deg);
+    -webkit-transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
     background-color: rgba(255, 255, 255, 0.6);
 }
 
 .swing-animation li.show {
     opacity: 1;
+    -webkit-transform: none;
     transform: none;
+    -webkit-transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
     box-shadow: 0 0 0.5rem;
 }
@@ -79,7 +93,7 @@
 }
 
 .my-weather-container__search-details {
-
+margin-bottom: 2rem;
 }
 
 .my-weather-container__search-details__searchbox {
@@ -103,6 +117,7 @@
 
 /**/
 .fade-animation {
+    -webkit-transition: opacity 1000ms;
     transition: opacity 1000ms;
 }
 .fade-animation.fadeOut {
@@ -113,8 +128,14 @@
 }
 /**/
 .my-weather-item-flex-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
 
@@ -133,6 +154,7 @@
 .my-progress-container__label {
     position: absolute;
     top: 50%;
+    -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     text-align: center;
     width: 100%;
