@@ -14,6 +14,12 @@ input, button {
     outline: none;
 }
 
+button[disabled=disabled], button:disabled,
+input[disabled=disabled], input:disabled{
+    color: darkgray;
+    background-color: lightgray;
+}
+
 .owf {
     color: white;
     vertical-align: middle;

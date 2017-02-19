@@ -50,6 +50,9 @@
         });
 
         self.cityNameSearch = ko.observable();
+        self.submitSearch = function() {
+            self.getCurrentWeatherByCityName(self.cityNameSearch());
+        };
 
         self.autocompleteCityFunction = function (term, callback) {
             request.jsonp.send('http://gd.geobytes.com/AutoCompleteCity?callback=handleStuff&sort=size&q=' + term, {
