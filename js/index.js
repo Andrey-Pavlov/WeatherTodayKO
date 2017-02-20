@@ -15,7 +15,7 @@
             self.currentWeather = ko.observable();
             self.currentWeather.subscribe(function (weather) {
                 var weatherCode = weather ? weather.id() : 800,
-                    newBackground = null;
+                    newBackground = 'sunny';
 
                 switch (true) {
                     case weatherCode < 300:
