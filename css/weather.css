@@ -43,15 +43,6 @@
     background: linear-gradient(rgb(117,127,154),rgb(215,221,232));
 }
 
-/**/
-
-.temperature {
-    font-size: 5rem;
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    color: black;
-}
-
-/**/
 .swing-animation {
     -webkit-perspective: 100px;
     perspective: 100px;
@@ -85,6 +76,12 @@
 
 .my-weather-container__weather-details__header {
     text-align: center;
+}
+
+.my-weather-container__weather-details__header__temperature {
+    font-size: 5rem;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    color: black;
 }
 
 .my-weather-container__weather-details h1 {
